@@ -12,7 +12,7 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential libffi-dev libssl-dev python3-setuptools
@@ -24,15 +24,16 @@ jobs:
       - name: Build with Buildozer
         run: |
           export PATH=$PATH:~/.local/bin
-          # Чистимо старі невдалі спроби і запускаємо білд
-          buildozer android clean
+          # Видаляємо старі конфігурації, щоб не було помилок з токенами
+          rm -rf .buildozer
           buildozer android debug
         env:
-          ACCEPT_SDK_LICENSE: "yes"
+          # Використовуємо вбудований токен GitHub для прав доступу
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload Artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: my-game-apk
+          name: crypto-tapper-apk
           path: bin/*.apk
           
