@@ -1,50 +1,21 @@
 [app]
-
-# Назва твоєї гри (можеш змінити на свою)
-title = My Pygame App
-
-# Назва пакету (має бути без пробілів, малими літерами)
+title = My Pygame Game
 package.name = mygame
-
-# Домен (можеш залишити так)
 package.domain = org.test
-
-# Папка з кодом (крапка означає "тут")
 source.dir = .
-
-# Які типи файлів включати в APK
 source.include_exts = py,png,jpg,kv,atlas,json
-
-# Версія програми
 version = 0.1
 
-# КРИТИЧНО: Тут ми вказали Python та Pygame (замість Kivy)
+# ВАЖЛИВО: вказуємо pygame, бо ти його використовуєш
 requirements = python3,pygame
 
-# Орієнтація екрану (portrait - вертикально, landscape - горизонтально)
 orientation = portrait
-
-# Чи буде гра на весь екран
 fullscreen = 1
-
-# Архітектури процесорів (залишаємо ці дві для більшості телефонів)
 android.archs = arm64-v8a, armeabi-v7a
-
-# Дозволити бекап (стандартно True)
 android.allow_backup = True
-
-# Мінімальна версія Android (21 - це Android 5.0)
+android.api = 33
 android.minapi = 21
 
-# Версія SDK, під яку збираємо (33 або 34 зараз стандарт)
-android.api = 33
-
-# (Опціонально) Якщо у тебе є іконка, розкоментуй (прибери #) нижче:
-# icon.filename = %(source.dir)s/icon.png
-
 [buildozer]
-# Рівень логів (2 означає "показувати все", корисно для пошуку помилок)
 log_level = 2
-
-# Чи зупиняти збірку при помилці
 warn_on_root = 1
