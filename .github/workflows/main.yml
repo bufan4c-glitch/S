@@ -1,5 +1,5 @@
 name: Build APK
-on: [push, workflow_dispatch]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -14,19 +14,25 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt update
-          sudo apt install -y git zip unzip autoconf autotools-dev libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
-          pip install --user --upgrade buildozer Cython==0.29.33
+          sudo apt-get update
+          sudo apt-get install -y build-essential libffi-dev libssl-dev python3-setuptools
+          sudo apt-get install -y libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
+          sudo apt-get install -y zlib1g-dev openjdk-17-jdk zip unzip
+          python3 -m pip install --upgrade pip
+          python3 -m pip install --upgrade buildozer cython==0.29.33
 
       - name: Build with Buildozer
         run: |
           export PATH=$PATH:~/.local/bin
-          # Ми запускаємо білд і автоматично погоджуємося з ліцензіями SDK
-          yes | buildozer android debug
+          # Чистимо старі невдалі спроби і запускаємо білд
+          buildozer android clean
+          buildozer android debug
+        env:
+          ACCEPT_SDK_LICENSE: "yes"
 
-      - name: Upload APK
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: my-game
+          name: my-game-apk
           path: bin/*.apk
           
