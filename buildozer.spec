@@ -1,27 +1,23 @@
 [app]
-
-# Назва гри
-title = My Pygame Game
-# Назва пакету (без пробілів)
+title = My Game
 package.name = mygame
 package.domain = org.test
 source.dir = .
 source.include_exts = py,png,jpg,kv,atlas,json
 version = 0.1
 
-# КРИТИЧНО: додаємо pygame
-requirements = python3,pygame
+# Додаємо hostpython3, це важливо для стабільної збірки
+requirements = python3,pygame,hostpython3
 
 orientation = portrait
 fullscreen = 1
-android.archs = arm64-v8a, armeabi-v7a
-android.allow_backup = True
 
-# Налаштування версій Android
-android.api = 33
+# Використовуємо перевірені версії для GitHub Actions
+android.api = 31
 android.minapi = 21
 android.ndk = 25b
-android.sdk = 33
+android.archs = arm64-v8a
+android.accept_sdk_license = True
 
 [buildozer]
 log_level = 2
