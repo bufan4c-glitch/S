@@ -1,24 +1,32 @@
-name: Build Android APK
-on:
-  push:
-    branches: [ main, master ]
-  workflow_dispatch:
+name: Build APK
+on: [push, workflow_dispatch]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build with Buildozer
-        uses: pypa/buildozer-action@v1
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          command: buildozer android debug
-          buildozer_version: stable
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y git zip unzip autoconf autotools-dev libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+          pip install --user --upgrade buildozer Cython==0.29.33
+
+      - name: Build with Buildozer
+        run: |
+          export PATH=$PATH:~/.local/bin
+          # Ми запускаємо білд і автоматично погоджуємося з ліцензіями SDK
+          yes | buildozer android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: my-game-apk
+          name: my-game
           path: bin/*.apk
           
