@@ -9,10 +9,11 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4  # ОНОВЛЕНО З v3 НА v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5 # ОНОВЛЕНО З v4 НА v5
         with:
           python-version: '3.10'
 
@@ -22,7 +23,6 @@ jobs:
           sudo apt-get install -y python3-pip build-essential git python3-dev ffmpeg libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev
           sudo apt-get install -y libgstreamer1.0-gstreamer-lite0-dev libgstreamer-plugins-base1.0-dev
           pip install --upgrade pip
-          # Ось тут ми додаємо Cython, щоб Buildozer не сварився
           pip install buildozer cython==0.29.33 setuptools
 
       - name: Build with Buildozer
@@ -31,8 +31,9 @@ jobs:
         continue-on-error: false
 
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4  # ЦЕ ГОЛОВНЕ ВИПРАВЛЕННЯ (v4)
         with:
-          name: my-game-apk
+          name: CryptoTapper-APK          # Назва архіву, який ти скачаєш
           path: bin/*.apk
+          if-no-files-found: error
           
