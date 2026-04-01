@@ -1,39 +1,38 @@
 name: Build APK
-on: [push, pull_request]
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-22.04
+
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential libffi-dev libssl-dev python3-setuptools
-          sudo apt-get install -y libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev
-          sudo apt-get install -y zlib1g-dev openjdk-17-jdk zip unzip
-          python3 -m pip install --upgrade pip
-          python3 -m pip install --upgrade buildozer cython==0.29.33
+          sudo apt-get install -y python3-pip build-essential git python3-dev ffmpeg libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev
+          sudo apt-get install -y libgstreamer1.0-gstreamer-lite0-dev libgstreamer-plugins-base1.0-dev
+          pip install --upgrade pip
+          # Ось тут ми додаємо Cython, щоб Buildozer не сварився
+          pip install buildozer cython==0.29.33 setuptools
 
       - name: Build with Buildozer
         run: |
-          export PATH=$PATH:~/.local/bin
-          # Видаляємо старі конфігурації, щоб не було помилок з токенами
-          rm -rf .buildozer
-          buildozer android debug
-        env:
-          # Використовуємо вбудований токен GitHub для прав доступу
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          yes | buildozer -v android debug
+        continue-on-error: false
 
       - name: Upload APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
-          name: crypto-tapper-apk
+          name: my-game-apk
           path: bin/*.apk
           
