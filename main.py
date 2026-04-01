@@ -24,3 +24,4 @@ jobs:
         with:
           name: package
           path: bin/*.apk
+ 
